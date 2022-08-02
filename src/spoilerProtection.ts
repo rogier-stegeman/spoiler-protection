@@ -76,7 +76,7 @@ function main() {
   let hostFound = true
 
   const href = window.location.href
-  if (href.startsWith('https://www.google.com/search') || href.startsWith('https://www.google.com/webhp')) {
+  if (href.match(/^https:\/\/www\.google\.[a-z]+\/($|search|webhp|imghp)/)) {
     google();
   }  else if (href.startsWith('https://www.youtube.com/watch')) {
       youtube();

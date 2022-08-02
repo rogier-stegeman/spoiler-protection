@@ -2,13 +2,13 @@
   "manifest_version": 3,
   "name": "Spoiler protection",
   "description": "Hide potential spoilers.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "icons": {},
   "action": {},
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["src/spoiler.js"],
+      "js": ["src/spoilerProtection.js"],
       "run_at": "document_end"
     }
   ],
