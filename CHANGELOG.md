@@ -2,6 +2,8 @@
 
 ## [1.1.0] - 2022-08-02
 
+### Added
+
 - Expand Google search filter to work for all Google domains and images.
 
 ## [1.0.0] - 2022-08-02
