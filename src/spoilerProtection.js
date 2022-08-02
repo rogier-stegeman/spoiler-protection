@@ -99,4 +99,4 @@ function main() {
     }
 }
 main();
-//# sourceMappingURL=spoiler.js.map
+//# sourceMappingURL=spoilerProtection.js.map
