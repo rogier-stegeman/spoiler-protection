@@ -1,4 +1,3 @@
-// console.log('RUNNING')
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -16,9 +15,8 @@ const style = `
   -ms-filter: blur(10px);
   filter: blur(10px);
 }`;
-const spoilerKeywords = ['death', 'dies', 'final moment'];
+const spoilerKeywords = ['death', 'dies', 'dead', 'died', 'die', 'kills', 'fight', 'final moment'];
 function waitForEl(findElement) {
-    // console.log('WAITING')
     let tries = 0;
     return new Promise((resolve, reject) => {
         const intervalId = setInterval(() => {
@@ -46,36 +44,61 @@ function unBlurElement(el) {
         return;
     el.classList.remove('spoiler-protection-blur-div');
 }
-function google() {
+function googleHideSearchSuggestions() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('google');
-        const searchBox = document.querySelector('[role="listbox"]');
-        console.log(searchBox);
-        document.addEventListener('keyup', () => __awaiter(this, void 0, void 0, function* () {
-            console.log('keypress');
+        let searchBox = document.querySelector('[role="listbox"]');
+        document.addEventListener('keydown', () => __awaiter(this, void 0, void 0, function* () {
+            if (!searchBox)
+                searchBox = document.querySelector('[role="listbox"]');
             blurElement(searchBox);
-            yield setTimeout(() => { }, 50);
-            // const searchSuggestions = document.querySelector('[role="presentation"]').querySelectorAll('[role="option"]');
-            // const searchBox = window.location.pathname === '/webhp' ? document.querySelector('[role="presentation"]') : document.querySelector('[role="presentation"]')
+        }));
+        document.addEventListener('keyup', () => __awaiter(this, void 0, void 0, function* () {
+            if (!searchBox)
+                searchBox = document.querySelector('[role="listbox"]');
             const searchSuggestions = searchBox.querySelectorAll('li[role="presentation"]');
             for (const searchSuggestion of searchSuggestions) {
                 const text = searchSuggestion.getElementsByTagName('span')[0].textContent;
                 if (spoilerKeywords.some((keyword) => text.includes(keyword))) {
+                    searchSuggestion.remove();
+                }
+            }
+            // setTimeout(()=> unBlurElement(searchBox), 50)
+            unBlurElement(searchBox);
+        }));
+    });
+}
+function youtubeHideSearchSuggestions() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let searchBox = document.getElementsByClassName('gstl_50 sbdd_a')[0];
+        document.addEventListener('keydown', () => __awaiter(this, void 0, void 0, function* () {
+            if (!searchBox)
+                searchBox = document.getElementsByClassName('gstl_50 sbdd_a')[0];
+            blurElement(searchBox);
+        }));
+        document.addEventListener('keyup', () => __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            if (!searchBox)
+                searchBox = document.getElementsByClassName('gstl_50 sbdd_a')[0];
+            // await setTimeout(()=> {}, 500)
+            const searchSuggestions = searchBox.querySelectorAll('li[role="presentation"]');
+            for (const searchSuggestion of searchSuggestions) {
+                const text = (_a = searchSuggestion.getElementsByClassName('sbqs_c')[0]) === null || _a === void 0 ? void 0 : _a.textContent;
+                if (text && spoilerKeywords.some((keyword) => text.includes(keyword))) {
                     console.log('found');
                     searchSuggestion.remove();
                 }
             }
-            setTimeout(() => unBlurElement(searchBox), 50);
+            // setTimeout(()=> unBlurElement(searchBox), 500)
+            unBlurElement(searchBox);
         }));
     });
 }
-function youtube() {
+function youtubeBlurCommentSection() {
     return __awaiter(this, void 0, void 0, function* () {
         const findElement = (() => {
-            return document.getElementById('primary').querySelector('[section-identifier="comment-item-section"]');
+            return document.getElementById('primary').querySelector('[section-identifier="comment-item-section"]'); // ?? document.querySelector('[section-identifier="comment-item-section"]')
         });
         yield waitForEl(findElement);
-        // console.log('DONE WAITING')
         const commentSection = findElement();
         blurElement(commentSection);
     });
@@ -84,10 +107,12 @@ function main() {
     let hostFound = true;
     const href = window.location.href;
     if (href.match(/^https:\/\/www\.google\.[a-z]+\/($|search|webhp|imghp)/)) {
-        google();
+        googleHideSearchSuggestions();
     }
-    else if (href.startsWith('https://www.youtube.com/watch')) {
-        youtube();
+    else if (href.startsWith('https://www.youtube.com/')) {
+        youtubeHideSearchSuggestions();
+        if (window.location.pathname.startsWith('/watch'))
+            youtubeBlurCommentSection();
     }
     else {
         hostFound = false;
