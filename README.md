@@ -22,8 +22,6 @@ This extension provides some rudimentary protection against accidental spoilers 
 
 ## TODO
 
-- Add search hiding in YouTube.
-- Search hiding in URL bar.
 - For each keyword for search result removal, check if it is in the search query first.
 - Add enable/disable button to google (and youtube).
 
